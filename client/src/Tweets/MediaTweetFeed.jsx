@@ -2,9 +2,9 @@ import React from "react";
 import { useFeed } from "../Contexts/FeedContext";
 import styled from "styled-components";
 
-const MediaTweetFeed = ({ tweet }) => {
+const MediaTweetFeed = ({ tweetId }) => {
   const { tweetsById } = useFeed();
-  const media = tweetsById[tweet]["media"];
+  const media = tweetsById[tweetId]["media"];
 
   return (
     <Wrapper>

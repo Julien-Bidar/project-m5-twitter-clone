@@ -4,18 +4,20 @@ import { useFeed } from "../Contexts/FeedContext";
 import Action from "./Action";
 import TweetActionIcon from "./TweetActionIcon";
 
-const ActionBar = ({ tweet }) => {
+const ActionBar = ({ tweetId }) => {
   // consume context
   const { tweetsById } = useFeed();
 
   //use state
   const [numOfLikes, setNumOfLikes] = useState();
   const [numOfRetweets, setNumOfRetweets] = useState();
-  const [isLiked, setIsLiked] = useState(tweetsById[tweet].isLiked);
-  const [isRetweeted, setIsRetweeted] = useState(tweetsById[tweet].isRetweeted);
+  const [isLiked, setIsLiked] = useState(tweetsById[tweetId].isLiked);
+  const [isRetweeted, setIsRetweeted] = useState(
+    tweetsById[tweetId].isRetweeted
+  );
   useEffect(() => {
-    setNumOfLikes(tweetsById[tweet].numOfLikes);
-    setNumOfRetweets(tweetsById[tweet].numOfRetweets);
+    setNumOfLikes(tweetsById[tweetId].numOfLikes);
+    setNumOfRetweets(tweetsById[tweetId].numOfRetweets);
   }, [tweetsById]);
 
   //   const isRetweeted = tweetsById[tweet].isRetweeted;

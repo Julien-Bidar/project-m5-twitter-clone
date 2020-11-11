@@ -5,7 +5,7 @@ import HeaderTweetFeed from "./HeaderTweetFeed";
 import MediaTweetFeed from "./MediaTweetFeed";
 import styled from "styled-components";
 
-const TweetFeed = ({ tweet }) => {
+const TweetFeed = ({ tweetId }) => {
   const { feedStatus } = useFeed();
 
   return (
@@ -14,9 +14,9 @@ const TweetFeed = ({ tweet }) => {
         <p>Loading...</p>
       ) : (
         <FeedWrapper>
-          <HeaderTweetFeed tweet={tweet} />
-          <MediaTweetFeed tweet={tweet} />
-          <ActionBar tweet={tweet} />
+          <HeaderTweetFeed tweetId={tweetId} />
+          <MediaTweetFeed tweetId={tweetId} />
+          <ActionBar tweetId={tweetId} />
         </FeedWrapper>
       )}
     </div>

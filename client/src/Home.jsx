@@ -11,8 +11,8 @@ const Home = () => {
         {" "}
         Home Feed Placeholder for Meow box with profile pic
       </Placeholder>
-      {tweetIds.map((tweet) => {
-        return <TweetFeed key={tweet} tweet={tweet} />;
+      {tweetIds.map((tweetId) => {
+        return <TweetFeed key={tweetId} tweetId={tweetId} />;
       })}
     </div>
   );

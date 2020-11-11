@@ -3,18 +3,28 @@ import { useFeed } from "../Contexts/FeedContext";
 import { FiRepeat } from "react-icons/fi";
 import moment from "moment";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
-const HeaderTweetFeed = ({ tweet }) => {
+const HeaderTweetFeed = ({ tweetId }) => {
+  //consume context
   const { tweetsById } = useFeed();
-  const authorName = tweetsById[tweet]["author"]["displayName"];
-  const avatar = tweetsById[tweet]["author"]["avatarSrc"];
-  const handle = tweetsById[tweet]["author"]["handle"];
-  const timestamp = tweetsById[tweet]["timestamp"];
-  const date = moment(timestamp).format("MMM do");
-  const tweeStatus = tweetsById[tweet]["status"];
 
-  const retweetValue = tweetsById[tweet]["retweetFrom"];
-  //const retweetName = tweetsById[tweet]["retweetFrom"]["displayName"];
+  //set const for the values we need
+  const authorName = tweetsById[tweetId]["author"]["displayName"];
+  const avatar = tweetsById[tweetId]["author"]["avatarSrc"];
+  const handle = tweetsById[tweetId]["author"]["handle"];
+  const timestamp = tweetsById[tweetId]["timestamp"];
+  const date = moment(timestamp).format("MMM do");
+  const tweeStatus = tweetsById[tweetId]["status"];
+  const retweetValue = tweetsById[tweetId]["retweetFrom"];
+  const history = useHistory();
+
+  console.log(tweetsById[tweetId]);
+
+  // handles
+  const handleTweetDetail = (tweetId) => {
+    history.push(`/tweet/${tweetId}`);
+  };
 
   return (
     <Wrapper>
@@ -24,7 +34,7 @@ const HeaderTweetFeed = ({ tweet }) => {
           <span>
             <FiRepeat />
           </span>{" "}
-          {tweetsById[tweet]["retweetFrom"]["displayName"]} Remeowed{" "}
+          {tweetsById[tweetId]["retweetFrom"]["displayName"]} Remeowed{" "}
         </Retweeted>
       )}
       <AvAndInfoWrap>
@@ -37,7 +47,13 @@ const HeaderTweetFeed = ({ tweet }) => {
             <Handle>@{handle}</Handle>
             <Date>{date}</Date>
           </p>
-          <Status>{tweeStatus}</Status>
+          <Status
+            onClick={() => {
+              handleTweetDetail(tweetId);
+            }}
+          >
+            {tweeStatus}
+          </Status>
         </div>
       </AvAndInfoWrap>
     </Wrapper>

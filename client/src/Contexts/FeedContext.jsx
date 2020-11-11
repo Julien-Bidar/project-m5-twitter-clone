@@ -20,7 +20,6 @@ export const FeedProvider = ({ children }) => {
         setTweetIds(tweetIds);
         setTweetsById(tweetsById);
         console.log(tweetsById);
-        console.log(tweetsById[tweetIds[10]]["author"]["displayName"]); //
         setFeedStatus("idle");
       });
   }, []);

@@ -1,9 +1,9 @@
 import React from "react";
+import styled from "styled-components";
 import { useFeed } from "../Contexts/FeedContext";
 import ActionBar from "./ActionBar";
 import HeaderTweetFeed from "./HeaderTweetFeed";
 import MediaTweetFeed from "./MediaTweetFeed";
-import styled from "styled-components";
 
 const TweetFeed = ({ tweetId }) => {
   const { feedStatus } = useFeed();

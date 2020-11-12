@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { UseCurrentUser } from "../Contexts/CurrentUserContext";
+import ProfileFeed from "./ProfileFeed";
 import ProfileHeader from "./ProfileHeader";
 import ProfileInfo from "./ProfileInfos";
+import ProfileLinks from "./ProfileLinks";
 
 const Profile = () => {
   const { status } = UseCurrentUser();
@@ -15,6 +17,8 @@ const Profile = () => {
         <>
           <ProfileHeader />
           <ProfileInfo />
+          <ProfileLinks />
+          <ProfileFeed />
         </>
       )}
     </Wrapper>
@@ -23,7 +27,8 @@ const Profile = () => {
 
 const Wrapper = styled.div`
   margin-top: 20px;
-  margin-right: 20px;
+  margin-right: 40px;
+  margin-bottom: 20px;
   border: 1px solid grey;
 `;
 

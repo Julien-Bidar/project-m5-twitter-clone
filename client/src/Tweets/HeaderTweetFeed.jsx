@@ -8,22 +8,30 @@ import { useHistory } from "react-router-dom";
 const HeaderTweetFeed = ({ tweetId }) => {
   //consume context
   const { tweetsById } = useFeed();
-
-  //set const for the values we need
-  const authorName = tweetsById[tweetId]["author"]["displayName"];
-  const avatar = tweetsById[tweetId]["author"]["avatarSrc"];
-  const handle = tweetsById[tweetId]["author"]["handle"];
-  const timestamp = tweetsById[tweetId]["timestamp"];
-  const date = moment(timestamp).format("MMM do");
-  const tweeStatus = tweetsById[tweetId]["status"];
-  const retweetValue = tweetsById[tweetId]["retweetFrom"];
   const history = useHistory();
+  console.log({ tweetsById, author: tweetsById[tweetId] });
 
-  console.log(tweetsById[tweetId]);
+  const tweet = tweetsById[tweetId];
+  if (!tweet) {
+    return null;
+  }
+  //set const for the values we need
+  const authorName = tweet["author"]["displayName"];
+  const avatar = tweet["author"]["avatarSrc"];
+  const handle = tweet["author"]["handle"];
+  const timestamp = tweet["timestamp"];
+  const date = moment(timestamp).format("MMM do");
+  const tweeStatus = tweet["status"];
+  const retweetValue = tweet["retweetFrom"];
 
   // handles
   const handleTweetDetail = (tweetId) => {
     history.push(`/tweet/${tweetId}`);
+  };
+
+  const handleProfile = (handle) => {
+    history.push(`/${handle}`);
+    console.log(handle);
   };
 
   return (
@@ -43,7 +51,7 @@ const HeaderTweetFeed = ({ tweetId }) => {
         </div>
         <div>
           <p>
-            <Name>{authorName}</Name>
+            <Name onClick={() => handleProfile(handle)}>{authorName}</Name>
             <Handle>@{handle}</Handle>
             <Date>{date}</Date>
           </p>

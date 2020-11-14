@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useFeed } from "../Contexts/FeedContext";
 import ActionBar from "./ActionBar";
@@ -7,15 +8,39 @@ import MediaTweetFeed from "./MediaTweetFeed";
 
 const TweetFeed = ({ tweetId }) => {
   const { feedStatus } = useFeed();
+  const history = useHistory();
+
+  const handleTweetDetail = (tweetId, e) => {
+    e.stopPropagation();
+    history.push(`/tweet/${tweetId}`);
+  };
+
+  const keyDown = (tweetId, e) => {
+    e.stopPropagation();
+    if (e.key === "Enter") {
+      history.push(`/tweet/${tweetId}`);
+    }
+  };
 
   return (
-    <div>
+    <div
+      onKeyDown={(e) => keyDown(tweetId, e)}
+      tabIndex="0"
+      aria-label="view tweet"
+    >
       {feedStatus === "loading" ? (
         <p>Loading...</p>
       ) : (
         <FeedWrapper>
-          <HeaderTweetFeed tweetId={tweetId} />
-          <MediaTweetFeed tweetId={tweetId} />
+          <HeaderTweetFeed
+            tweetId={tweetId}
+            handleTweetDetail={handleTweetDetail}
+            keyDown={keyDown}
+          />
+          <MediaTweetFeed
+            tweetId={tweetId}
+            handleTweetDetail={handleTweetDetail}
+          />
           <ActionBar tweetId={tweetId} />
         </FeedWrapper>
       )}

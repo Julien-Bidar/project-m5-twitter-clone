@@ -11,15 +11,13 @@ const ProfileFeed = () => {
   // status state + tweetIds and tweets targeted user
   const [status, setStatus] = useState("Loading");
   const [tweetIds, setTweetIds] = useState([]);
-  const [tweetsById, setTweetsById] = useState({});
+  //const [tweetsById, setTweetsById] = useState({});
 
   //getting handle for targetted user setting default tu currentUer
   let { profileId } = useParams();
   if (profileId === "profile") {
     profileId = currentUser.profile.handle;
   }
-  console.log(profileId);
-  console.log(tweetIds);
 
   //fetching targeted user's data
   const handleFetchTweetsId = async () => {
@@ -27,7 +25,7 @@ const ProfileFeed = () => {
     response = await response.json();
     setTweetIds(response.tweetIds);
     setStatus("Idle");
-    setTweetsById(response.tweetsById);
+    //setTweetsById(response.tweetsById);
   };
 
   useEffect(() => {

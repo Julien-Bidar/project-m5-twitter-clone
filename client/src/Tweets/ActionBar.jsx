@@ -7,31 +7,38 @@ import TweetActionIcon from "./TweetActionIcon";
 const ActionBar = ({ tweetId }) => {
   // consume context
   const { tweetsById } = useFeed();
+
   const tweet = tweetsById[tweetId];
 
   //use state
-  const [numOfLikes, setNumOfLikes] = useState();
+  const [numOfLikes, setNumOfLikes] = useState(0); //this should come from api call
   const [numOfRetweets, setNumOfRetweets] = useState();
-  const [isLiked, setIsLiked] = useState(tweet?.isLiked ?? false);
+  const [isLiked, setIsLiked] = useState(tweet?.isLiked ?? false); //optional  chaining with nullish coalescing
   const [isRetweeted, setIsRetweeted] = useState(tweet?.isRetweeted ?? false);
-  useEffect(() => {
-    if (tweet) {
-      setNumOfLikes(tweet.numOfLikes);
-      setNumOfRetweets(tweet.numOfRetweets);
-    }
-  }, [tweetsById]);
 
-  //   const isRetweeted = tweetsById[tweet].isRetweeted;
-  //   const isLiked = tweetsById[tweet].isLiked;
-
-  // handles
-  const handleToggleLike = () => {
+  // handles and PUT
+  const handleToggleLike = async () => {
+    //UI/UX part of like
     if (isLiked) {
       setNumOfLikes(numOfLikes - 1);
     } else {
       setNumOfLikes(numOfLikes + 1);
     }
-    setIsLiked(!isLiked);
+    const likeValueToSet = !isLiked;
+    setIsLiked(likeValueToSet);
+
+    //API post to update tweet
+    let response = await fetch(`/api/tweet/${tweetId}/like`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ like: likeValueToSet }),
+      method: "PUT",
+    });
+    response = await response.json();
+    console.log(response);
+    await setNumOfLikes(numOfLikes + 1);
   };
 
   const handleToggleRetweet = () => {
@@ -45,29 +52,56 @@ const ActionBar = ({ tweetId }) => {
 
   return (
     <Wrapper>
-      <Action color="rgb(27, 149, 224)" size={40}>
+      <Action color="rgb(27, 149, 224)" size={40} tabIndex="0">
         <TweetActionIcon kind="reply" />
       </Action>
-      <Action onClick={handleToggleRetweet} color="rgb(23, 191, 99)" size={40}>
+      <Action
+        onClick={handleToggleRetweet}
+        color="rgb(23, 191, 99)"
+        size={40}
+        tabIndex="0"
+      >
         <TweetActionIcon
           kind="retweet"
           color={isRetweeted ? "rgb(23, 191, 99)" : undefined}
         />
-        {/* {numOfRetweets > 0 && <span>{numOfRetweets}</span>} Not working */}
+        {/* {numOfRetweets > 0 && <Stats>{numOfRetweets}</Stats>} */}
       </Action>
-      <Action onClick={handleToggleLike} color="rgb(224, 36, 94)" size={40}>
-        <TweetActionIcon
-          kind="like"
-          color={isRetweeted ? "rgb(224, 36, 94)" : undefined}
-        />
-        {/* {numOfLikes > 0 && <span>{numOfLikes}</span>} not working */}
-      </Action>
-      <Action color="rgb(27, 149, 224)" size={40}>
+      <IconAndStats>
+        <Action
+          onClick={handleToggleLike}
+          color="rgb(224, 36, 94)"
+          size={40}
+          tabIndex="0"
+        >
+          <TweetActionIcon
+            kind="like"
+            color={isLiked ? "rgb(224, 36, 94)" : undefined}
+          />
+        </Action>
+        <Stats
+          style={
+            numOfLikes > 0 ? { display: "block" } : { visibility: "hidden" }
+          }
+        >
+          {numOfLikes}
+        </Stats>
+      </IconAndStats>
+      <Action color="rgb(27, 149, 224)" size={40} tabIndex="0">
         <TweetActionIcon kind="share" />
       </Action>
     </Wrapper>
   );
 };
+
+const IconAndStats = styled.span`
+  display: flex;
+  align-items: center;
+`;
+
+const Stats = styled.span`
+  margin-left: 5px;
+`;
 
 const Wrapper = styled.div`
   display: flex;

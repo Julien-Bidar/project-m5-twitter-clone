@@ -1,10 +1,12 @@
 import React from "react";
-import { UseCurrentUser } from "../Contexts/CurrentUserContext";
 import styled from "styled-components";
 
-const ProfileHeader = () => {
-  const { currentUser } = UseCurrentUser();
-  const { avatarSrc, bannerSrc } = currentUser.profile;
+const ProfileHeader = ({ userInfo }) => {
+  //consuming currentUser context
+  if (!userInfo) {
+    return <p>Loading...</p>;
+  }
+  const { avatarSrc, bannerSrc } = userInfo.profile;
 
   return (
     <Wrapper>

@@ -2,12 +2,20 @@ import React from "react";
 import { useFeed } from "../Contexts/FeedContext";
 import styled from "styled-components";
 
-const MediaTweetFeed = ({ tweetId }) => {
+const MediaTweetFeed = ({ tweetId, handleTweetDetail }) => {
   const { tweetsById } = useFeed();
-  const media = tweetsById[tweetId]["media"];
+  const tweet = tweetsById[tweetId];
+  if (!tweet) {
+    return null;
+  }
+  const media = tweet["media"];
 
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={(e) => {
+        handleTweetDetail(tweetId, e);
+      }}
+    >
       {media.length > 0 && (
         <>
           <Media src={media[0].url} alt="" />

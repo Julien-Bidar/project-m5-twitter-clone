@@ -4,8 +4,13 @@ import styled from "styled-components";
 import { FiMapPin, FiCalendar } from "react-icons/fi";
 import moment from "moment";
 
-const ProfileInfo = () => {
-  const { currentUser } = UseCurrentUser();
+const ProfileInfo = ({ userInfo }) => {
+  // const { currentUser } = UseCurrentUser();
+  if (!userInfo) {
+    return <p>Loading...</p>;
+  }
+  console.log({ userInfo: userInfo });
+
   const {
     bio,
     displayName,
@@ -15,7 +20,8 @@ const ProfileInfo = () => {
     location,
     numFollowers,
     numFollowing,
-  } = currentUser.profile;
+  } = userInfo.profile;
+
   const date = moment(joined).format("MMMM YYYY");
 
   return (

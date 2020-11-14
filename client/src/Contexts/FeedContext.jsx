@@ -8,24 +8,24 @@ export const FeedProvider = ({ children }) => {
   const [tweetsById, setTweetsById] = useState({});
   const [feedStatus, setFeedStatus] = useState("loading");
 
+  const fetchFeed = async () => {
+    let data = await fetch("/api/me/home-feed");
+    data = await data.json();
+    const tweetIds = data["tweetIds"];
+    const tweetsById = data["tweetsById"];
+    setTweetIds(tweetIds);
+    setTweetsById(tweetsById);
+    setFeedStatus("idle");
+  };
   // fetch data
   useEffect(() => {
-    fetch("/api/me/home-feed")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        const tweetIds = data["tweetIds"];
-        const tweetsById = data["tweetsById"];
-        setTweetIds(tweetIds);
-        setTweetsById(tweetsById);
-        console.log(tweetsById);
-        setFeedStatus("idle");
-      });
+    fetchFeed();
   }, []);
 
   return (
-    <FeedContext.Provider value={{ tweetIds, tweetsById, feedStatus }}>
+    <FeedContext.Provider
+      value={{ tweetIds, tweetsById, feedStatus, fetchFeed }}
+    >
       {children}
     </FeedContext.Provider>
   );

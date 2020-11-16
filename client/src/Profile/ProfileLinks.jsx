@@ -7,30 +7,41 @@ import { COLORS } from "../constants";
 const ProfileLinks = () => {
   return (
     <>
-      <Wrapper>
-        <Links to="#">Tweet</Links>
-        <Links to="#">Media</Links>
-        <Links to="#">Likes</Links>
-      </Wrapper>
-      <hr />
+      <BtnDiv>
+        <Button aria-label="See user tweet" tabIndex="0" autofocus>
+          Tweets
+        </Button>
+        <Button tabIndex="0">Media</Button>
+        <Button tabIndex="0">Likes</Button>
+      </BtnDiv>
     </>
   );
 };
 
-const Wrapper = styled.div`
+const BtnDiv = styled.div`
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 15px;
+  justify-content: space-between;
+  margin-top: 50px;
+  border-bottom: 1px solid grey;
 `;
 
-const Links = styled(NavLink)`
+const Button = styled.button`
+  box-sizing: border-box;
+  width: 33.1%;
+  height: 50px;
+  font-size: 18px;
   font-weight: bold;
-  text-decoration: none;
-  color: black;
-
-  /* &.active {
+  background: none;
+  color: #707070;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+  border-bottom: 3px solid transparent;
+  &:hover {
     color: ${COLORS.primary};
-  } */
+    border-bottom: 3px solid ${COLORS.primary};
+  }
 `;
 
 export default ProfileLinks;

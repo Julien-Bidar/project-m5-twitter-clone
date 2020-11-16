@@ -1,3 +1,5 @@
+// things I'd like to add: Follow and unfollow action, like animation, don't display the follow button on userProfile, retweet plus stretch.
+
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import styled from "styled-components";

@@ -2,6 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useFeed } from "../Contexts/FeedContext";
+import Loader from "../icons/Loading";
 import ActionBar from "./ActionBar";
 import HeaderTweetFeed from "./HeaderTweetFeed";
 import MediaTweetFeed from "./MediaTweetFeed";
@@ -29,7 +30,7 @@ const TweetFeed = ({ tweetId }) => {
       aria-label="view tweet"
     >
       {feedStatus === "loading" ? (
-        <p>Loading...</p>
+        <Loader />
       ) : (
         <FeedWrapper>
           <HeaderTweetFeed
@@ -49,7 +50,13 @@ const TweetFeed = ({ tweetId }) => {
 };
 
 const FeedWrapper = styled.div`
-  width: 570px;
+  width: 600px;
+  padding: 10px;
+  border-bottom: 1px solid grey;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export default TweetFeed;

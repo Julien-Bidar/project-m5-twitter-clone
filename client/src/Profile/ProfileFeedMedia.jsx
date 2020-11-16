@@ -1,20 +1,34 @@
 import React from "react";
-import { useFeed } from "../Contexts/FeedContext";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
-const MediaTweetFeed = ({ tweetId, handleTweetDetail }) => {
-  const { tweetsById } = useFeed();
+const ProfileFeedMedia = ({ tweetId, tweetsById }) => {
   const tweet = tweetsById[tweetId];
+  const history = useHistory();
   if (!tweet) {
     return null;
   }
   const media = tweet["media"];
+
+  //handle
+  const handleTweetDetail = (tweetId, e) => {
+    e.stopPropagation();
+    history.push(`/tweet/${tweetId}`);
+  };
+
+  const keyDown = (tweetId, e) => {
+    e.stopPropagation();
+    if (e.key === "Enter") {
+      history.push(`/tweet/${tweetId}`);
+    }
+  };
 
   return (
     <Wrapper
       onClick={(e) => {
         handleTweetDetail(tweetId, e);
       }}
+      onKeyDown={(e) => keyDown(tweetId, e)}
     >
       {media.length > 0 && (
         <>
@@ -28,12 +42,13 @@ const MediaTweetFeed = ({ tweetId, handleTweetDetail }) => {
 const Wrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  width: 580px;
 `;
 
 const Media = styled.img`
-  width: 500px;
+  width: 505px;
   height: auto;
   border-radius: 5px;
 `;
 
-export default MediaTweetFeed;
+export default ProfileFeedMedia;

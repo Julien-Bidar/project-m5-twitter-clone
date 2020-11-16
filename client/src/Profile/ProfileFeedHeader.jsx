@@ -1,14 +1,10 @@
 import React from "react";
-import { useFeed } from "../Contexts/FeedContext";
 import { FiRepeat } from "react-icons/fi";
 import moment from "moment";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import Loader from "../icons/Loading";
 
-const HeaderTweetFeed = ({ tweetId, handleTweetDetail, keyDown }) => {
-  //consume context
-  const { tweetsById } = useFeed();
+const ProfileFeedHeader = ({ tweetId, tweetsById }) => {
   const history = useHistory();
 
   const tweet = tweetsById[tweetId];
@@ -25,6 +21,18 @@ const HeaderTweetFeed = ({ tweetId, handleTweetDetail, keyDown }) => {
   const retweetValue = tweet["retweetFrom"];
 
   // handles
+  const handleTweetDetail = (tweetId, e) => {
+    e.stopPropagation();
+    history.push(`/tweet/${tweetId}`);
+  };
+
+  const keyDown = (tweetId, e) => {
+    e.stopPropagation();
+    if (e.key === "Enter") {
+      history.push(`/tweet/${tweetId}`);
+    }
+  };
+
   const handleProfile = (handle, e) => {
     e.stopPropagation();
     history.push(`/${handle}`);
@@ -106,6 +114,7 @@ const Retweeted = styled.p`
 
 const Wrapper = styled.div`
   margin-top: 44px;
+  width: 580px;
 `;
 
 const Avatar = styled.img`
@@ -117,4 +126,4 @@ const Avatar = styled.img`
 const AvAndInfoWrap = styled.div`
   display: flex;
 `;
-export default HeaderTweetFeed;
+export default ProfileFeedHeader;

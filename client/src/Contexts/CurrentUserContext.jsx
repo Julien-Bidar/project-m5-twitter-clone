@@ -16,6 +16,10 @@ export const CurrentUserProvider = ({ children }) => {
       .then((data) => {
         setCurrentUser(data);
         setStatus("idle");
+      })
+      .catch((err) => {
+        console.log(err);
+        setStatus("error");
       });
   }, []);
 

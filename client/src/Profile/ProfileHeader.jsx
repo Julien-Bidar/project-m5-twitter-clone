@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import Loader from "../icons/Loading";
 
 const ProfileHeader = ({ userInfo }) => {
-  //consuming currentUser context
-  if (!userInfo) {
-    return <p>Loading...</p>;
+  if (!userInfo || userInfo.error === "user-not-found") {
+    return null;
   }
   const { avatarSrc, bannerSrc } = userInfo.profile;
 
@@ -25,7 +25,7 @@ const Avatar = styled.img`
   border-radius: 50%;
   border: solid white 4px;
   height: auto;
-  width: 18vw;
+  width: 150px;
   position: absolute;
   top: 66%;
   left: 5%;
@@ -33,6 +33,7 @@ const Avatar = styled.img`
 
 const Wrapper = styled.div`
   position: relative;
+  width: 600px;
 `;
 
 export default ProfileHeader;

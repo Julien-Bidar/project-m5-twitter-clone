@@ -9,13 +9,18 @@ export const FeedProvider = ({ children }) => {
   const [feedStatus, setFeedStatus] = useState("loading");
 
   const fetchFeed = async () => {
-    let data = await fetch("/api/me/home-feed");
-    data = await data.json();
-    const tweetIds = data["tweetIds"];
-    const tweetsById = data["tweetsById"];
-    setTweetIds(tweetIds);
-    setTweetsById(tweetsById);
-    setFeedStatus("idle");
+    try {
+      let data = await fetch("/api/me/home-feed");
+      data = await data.json();
+      console.log(data);
+      const tweetIds = data["tweetIds"];
+      const tweetsById = data["tweetsById"];
+      setTweetIds(tweetIds);
+      setTweetsById(tweetsById);
+      setFeedStatus("idle");
+    } catch (err) {
+      setFeedStatus("error");
+    }
   };
   // fetch data
   useEffect(() => {

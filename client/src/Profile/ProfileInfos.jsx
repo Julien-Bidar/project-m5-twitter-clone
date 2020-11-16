@@ -3,13 +3,14 @@ import { UseCurrentUser } from "../Contexts/CurrentUserContext";
 import styled from "styled-components";
 import { FiMapPin, FiCalendar } from "react-icons/fi";
 import moment from "moment";
+import Loader from "../icons/Loading";
+import { COLORS } from "../constants";
 
 const ProfileInfo = ({ userInfo }) => {
   // const { currentUser } = UseCurrentUser();
-  if (!userInfo) {
-    return <p>Loading...</p>;
+  if (!userInfo || userInfo.error === "user-not-found") {
+    return <Loader />;
   }
-  console.log({ userInfo: userInfo });
 
   const {
     bio,
@@ -20,16 +21,27 @@ const ProfileInfo = ({ userInfo }) => {
     location,
     numFollowers,
     numFollowing,
+    isBeingFollowedByYou,
   } = userInfo.profile;
 
   const date = moment(joined).format("MMMM YYYY");
 
   return (
     <Wrapper>
+      {isBeingFollowedByYou ? (
+        <PurpleFollow>
+          <ButtonFollowing>Following</ButtonFollowing>
+        </PurpleFollow>
+      ) : (
+        <PurpleFollow>
+          <ButtonFollow>Follow</ButtonFollow>
+        </PurpleFollow>
+      )}
       <Name>{displayName}</Name>
       <Handle>
         {" "}
-        @{handle} <span>{isFollowingYou && <p>Follows you</p>}</span>
+        @{handle}{" "}
+        <span>{isFollowingYou && <Follows>Follows you</Follows>}</span>
       </Handle>
       <Bio>{bio}</Bio>
       <LocAndDateWrap>
@@ -58,6 +70,44 @@ const ProfileInfo = ({ userInfo }) => {
   );
 };
 
+const ButtonFollow = styled.button`
+  background-color: transparent;
+  border: 2px ${COLORS.primary} solid;
+  padding: 10px;
+  color: ${COLORS.primary};
+  font-weight: bold;
+  border-radius: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ButtonFollowing = styled.button`
+  background: ${COLORS.primary};
+  border: none;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const PurpleFollow = styled.span`
+  position: absolute;
+  top: -60px;
+  right: 20px;
+`;
+
+const Follows = styled.span`
+  background-color: lightgray;
+  padding: 5px 7px;
+  border-radius: 4px;
+`;
+
 const NumFollow = styled.p`
   font-weight: bold;
 `;
@@ -77,12 +127,12 @@ const LocAndDate = styled.span`
 
 const Bio = styled.p`
   font-weight: 500;
-  margin-top: 16px;
+  margin-top: 28px;
 `;
 
 const Handle = styled.p`
   color: #5f5d5d;
-  margin-bottom: 7px;
+  margin: 20px 0;
   font-weight: bold;
 `;
 
@@ -93,9 +143,11 @@ const Name = styled.p`
 `;
 
 const Wrapper = styled.div`
-  margin-top: 12vw;
+  position: relative;
+  margin-top: 100px;
   margin-bottom: 20px;
-  padding-left: 28px;
+  padding-left: 20px;
+  width: 600px;
 `;
 
 const LocAndDateWrap = styled.div`

@@ -6,12 +6,12 @@ import TweetActionIcon from "./TweetActionIcon";
 
 const ActionBar = ({ tweetId }) => {
   // consume context
-  const { tweetsById } = useFeed();
+  const { tweetsById, fetchFeed } = useFeed();
 
   const tweet = tweetsById[tweetId];
 
   //use state
-  const [numOfLikes, setNumOfLikes] = useState(0); //this should come from api call
+  const [numOfLikes, setNumOfLikes] = useState(tweet?.numLikes);
   const [numOfRetweets, setNumOfRetweets] = useState();
   const [isLiked, setIsLiked] = useState(tweet?.isLiked ?? false); //optional  chaining with nullish coalescing
   const [isRetweeted, setIsRetweeted] = useState(tweet?.isRetweeted ?? false);
@@ -24,21 +24,24 @@ const ActionBar = ({ tweetId }) => {
     } else {
       setNumOfLikes(numOfLikes + 1);
     }
-    const likeValueToSet = !isLiked;
-    setIsLiked(likeValueToSet);
+    setIsLiked(!isLiked);
 
     //API post to update tweet
-    let response = await fetch(`/api/tweet/${tweetId}/like`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ like: likeValueToSet }),
-      method: "PUT",
-    });
-    response = await response.json();
-    console.log(response);
-    await setNumOfLikes(numOfLikes + 1);
+    try {
+      let response = await fetch(`/api/tweet/${tweetId}/like`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ like: !isLiked }),
+        method: "PUT",
+      });
+      response = await response.json();
+      console.log(tweetId);
+      await fetchFeed();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleToggleRetweet = () => {
@@ -56,7 +59,7 @@ const ActionBar = ({ tweetId }) => {
         <TweetActionIcon kind="reply" />
       </Action>
       <Action
-        onClick={handleToggleRetweet}
+        onClick={(e) => handleToggleRetweet(e)}
         color="rgb(23, 191, 99)"
         size={40}
         tabIndex="0"

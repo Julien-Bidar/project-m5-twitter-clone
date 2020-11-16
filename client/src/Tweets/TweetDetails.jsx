@@ -5,14 +5,19 @@ import ActionBar from "./ActionBar";
 import { useHistory, useParams } from "react-router-dom";
 import { useFeed } from "../Contexts/FeedContext";
 import moment from "moment";
+import Loader from "../icons/Loading";
+import { FiArrowLeft, FiRepeat } from "react-icons/fi";
+import { IconContext } from "react-icons";
 
 const TweetDetails = ({}) => {
   const { tweetId } = useParams();
   const { tweetsById } = useFeed();
   const history = useHistory();
   const tweet = tweetsById[tweetId];
+  const media = tweet["media"];
+
   if (!tweet) {
-    return <p>loading...</p>;
+    return <Loader />;
   }
 
   //set const for the values we need
@@ -20,7 +25,7 @@ const TweetDetails = ({}) => {
   const avatar = tweet["author"]["avatarSrc"];
   const handle = tweet["author"]["handle"];
   const timestamp = tweet["timestamp"];
-  const date = moment(timestamp).format("h:mm a MMM do Y");
+  const date = moment(timestamp).format("h:mm a MMM Do Y");
   const tweetStatus = tweet["status"];
   const retweetValue = tweet["retweetFrom"]; // add retweet
 
@@ -29,31 +34,146 @@ const TweetDetails = ({}) => {
   };
 
   return (
-    <div>
-      <button onClick={back}>back</button>
+    <Wrapper>
+      <BackWrapper>
+        <Button onClick={back}>
+          <IconContext.Provider
+            value={{
+              size: "1.5em",
+              color: "grey",
+            }}
+          >
+            <FiArrowLeft />
+          </IconContext.Provider>
+          <Span>Meow</Span>
+        </Button>
+      </BackWrapper>
+      {retweetValue !== undefined && (
+        <Retweeted>
+          {" "}
+          <span>
+            <FiRepeat />
+          </span>{" "}
+          {tweetsById[tweetId]["retweetFrom"]["displayName"]} Remeowed{" "}
+        </Retweeted>
+      )}
       <FeedWrapper>
-        <div>
+        <HeaderWrapper>
           <div>
             {" "}
-            <img src={avatar} alt="" />
+            <Avatar src={avatar} alt="" />
           </div>
-          <div>
+          <AuthorAndHandleWrap>
             {" "}
-            <p>{authorName}</p>
-            <p>@{handle}</p>
-          </div>
-        </div>
-        <p>{tweetStatus}</p>
-        <MediaTweetFeed tweetId={tweetId} />
-        <p>{date}</p>
+            <Author>{authorName}</Author>
+            <Handle>@{handle}</Handle>
+          </AuthorAndHandleWrap>
+        </HeaderWrapper>
+        <Status>{tweetStatus}</Status>
+        <MediaWrapper>
+          {media.length > 0 && (
+            <>
+              <Media src={media[0].url} alt="" />
+            </>
+          )}
+        </MediaWrapper>
+        <Date>{date}</Date>
+        <hr />
         <ActionBar tweetId={tweetId} />
       </FeedWrapper>
-    </div>
+    </Wrapper>
   );
 };
 
+const Date = styled.p`
+  margin: 15px 0;
+  color: grey;
+`;
+
+const Status = styled.p`
+  margin-bottom: 15px;
+  font-size: 18px;
+`;
+
+const Author = styled.p`
+  font-weight: bold;
+`;
+
+const Handle = styled.p`
+  padding-top: 10px;
+  color: grey;
+`;
+
+const AuthorAndHandleWrap = styled.div`
+  margin-left: 15px;
+`;
+
+const HeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+`;
+
+const MediaWrapper = styled.div`
+  width: 600px;
+`;
+
+const Media = styled.img`
+  min-width: 580px;
+  max-width: 580px;
+  height: auto;
+  border-radius: 5px;
+`;
+
+const Avatar = styled.img`
+  height: 70px;
+  width: auto;
+  border-radius: 50%;
+`;
+
+const Wrapper = styled.div`
+  border-bottom: 1px solid grey;
+  border-right: 1px solid grey;
+  border-left: 1px solid grey;
+  width: 600px;
+`;
+
+const BackWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid grey;
+`;
+
+const Span = styled.span`
+  margin-left: 18px;
+  font-weight: bold;
+  display: inline-block;
+`;
+
+const Button = styled.button`
+  outline: none;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 const FeedWrapper = styled.div`
-  width: 570px;
+  padding: 15px 10px;
+  width: 600px;
+`;
+
+const Retweeted = styled.p`
+  color: #5f5d5d;
+  margin-top: 15px;
+  padding-left: 10px;
 `;
 
 export default TweetDetails;
